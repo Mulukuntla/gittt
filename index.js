@@ -1,37 +1,47 @@
+const form = document.querySelector('form');
+  
+const descriptionInput = document.createElement('input');
+descriptionInput.type = 'text';
+descriptionInput.name = 'description';
+descriptionInput.id = 'description';
+descriptionInput.placeholder = 'Enter fruit description';
+const button = document.querySelector('#Add');
+form.insertBefore(descriptionInput, button);
+
+// Show the fruit description in italics on the next line
+const li=document.querySelector('li')
+const arr=new Array("King of fruits","tropical","orange","King of fruits")
+let count=0
 document.querySelectorAll('.fruit').forEach(li => {
-    const editBtn = document.createElement('button');
-    editBtn.textContent = 'Edit';
-    editBtn.className = 'edit-btn';
-    li.appendChild(editBtn);
-  });
+  const fruit=document.createElement('p')
+  const fruitDes=document.createTextNode(arr[count])
+  count=count+1
+  fruit.className='fruitDescription'
   
-  // Implement the code as in video but with one extra 'Edit' button in 'li'
+  fruit.appendChild(fruitDes)
+  fruit.style.fontStyle='italic'
   
+  li.appendChild(fruit)
   
-  
-  document.querySelector('.fruits').addEventListener('click', function(event) {
-    if (event.target.classList.contains('delete-btn')) {
-      event.target.parentElement.remove(); // Remove the list item
+});
+
+
+// Create a filter that shows only those fruits whose either name or description or both matches the entered text
+const filter = document.getElementById('filter');
+filter.addEventListener('keyup', function(event) {
+  const textEntered = event.target.value.toLowerCase();
+  const fruitItems = document.querySelectorAll('.fruit');
+
+  fruitItems.forEach(fruitItem => {
+    const fruitName = fruitItem.firstChild.textContent.toLowerCase(); // Get the text content of the fruit name
+    const fruitDescription = fruitItem.querySelector('.fruitDescription') 
+                              ? fruitItem.querySelector('.fruitDescription').textContent.toLowerCase() 
+                              : ''; // Get the text content of the fruit description, if it exists
+
+    if (fruitName.includes(textEntered) || fruitDescription.includes(textEntered)) {
+      fruitItem.style.display = 'flex'; // Show the fruit item if it matches the filter text
+    } else {
+      fruitItem.style.display = 'none'; // Hide the fruit item if it doesn't match the filter text
     }
   });
-  
-  
-  document.querySelector('form').addEventListener('submit', function(event) {
-    event.preventDefault(); // Prevent the default form submission
-    
-    const fruitInput = document.getElementById('fruit-to-add');
-    const fruitName = fruitInput.value.trim();
-    
-    if (fruitName) {
-      const ul = document.querySelector('.fruits');
-      const li = document.createElement('li');
-      li.className = 'fruit';
-      li.innerHTML = `
-        ${fruitName}
-        <button class="delete-btn">x</button>
-        <button class="edit-btn">Edit</button>
-      `;
-      ul.appendChild(li);
-      fruitInput.value = ''; // Clear the input field
-    }
-  });
+});
