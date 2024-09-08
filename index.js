@@ -1,47 +1,60 @@
-const form = document.querySelector('form');
+function handleFormSubmit(event){
+  event.preventDefault();
+  console.log('Hi');
   
-const descriptionInput = document.createElement('input');
-descriptionInput.type = 'text';
-descriptionInput.name = 'description';
-descriptionInput.id = 'description';
-descriptionInput.placeholder = 'Enter fruit description';
-const button = document.querySelector('#Add');
-form.insertBefore(descriptionInput, button);
-
-// Show the fruit description in italics on the next line
-const li=document.querySelector('li')
-const arr=new Array("King of fruits","tropical","orange","King of fruits")
-let count=0
-document.querySelectorAll('.fruit').forEach(li => {
-  const fruit=document.createElement('p')
-  const fruitDes=document.createTextNode(arr[count])
-  count=count+1
-  fruit.className='fruitDescription'
+ 
+  let namee=event.target.username.value;
+  let emaill=event.target.email.value;
+  let phonee=event.target.phone.value;
+  localStorage.setItem('Username',namee)
+  localStorage.setItem('Email',emaill)
+  localStorage.setItem('Phone',phonee)
   
-  fruit.appendChild(fruitDes)
-  fruit.style.fontStyle='italic'
   
-  li.appendChild(fruit)
+  let obj= {
+    'username':namee,
+    'email':emaill,
+    'phone':phonee,
+  }
   
-});
+  console.log(namee);
+  console.log(emaill);
+  console.log(phonee);
+  console.log(obj);
+  localStorage.setItem(obj.email,JSON.stringify(obj));
+  
+  const parent=document.getElementById('listOfItems');
+  const child=document.createElement('li');
+  child.textContent=`${obj.username} - ${obj.email} - ${obj.phone}`
+  const deleteButton=document.createElement('button');
+  const deleteText=document.createTextNode('delete');
+  deleteButton.appendChild(deleteText)
+  deleteButton.type='button'
+  deleteButton.value='Delete'
+  child.appendChild(deleteButton)
+  parent.appendChild(child)
+  deleteButton.onclick=()=>{
+    localStorage.removeItem(obj.email);
+    parent.removeChild(child)  
+  }
+  const editButton=document.createElement('button');
+  const editText=document.createTextNode('edit');
+  editButton.appendChild(editText)
+  editButton.type='button'
+  editButton.value='edit'
+  child.appendChild(editButton)
+  editButton.onclick=()=>{
+    localStorage.removeItem(obj.email);
+    parent.removeChild(child)  
+    document.getElementById('username').value=obj.username
+    document.getElementById('email').value=obj.email
+    document.getElementById('phone').value=obj.phone
+  }
+  
+  
+  
+  
+  
+}
 
-
-// Create a filter that shows only those fruits whose either name or description or both matches the entered text
-const filter = document.getElementById('filter');
-filter.addEventListener('keyup', function(event) {
-  const textEntered = event.target.value.toLowerCase();
-  const fruitItems = document.querySelectorAll('.fruit');
-
-  fruitItems.forEach(fruitItem => {
-    const fruitName = fruitItem.firstChild.textContent.toLowerCase(); // Get the text content of the fruit name
-    const fruitDescription = fruitItem.querySelector('.fruitDescription') 
-                              ? fruitItem.querySelector('.fruitDescription').textContent.toLowerCase() 
-                              : ''; // Get the text content of the fruit description, if it exists
-
-    if (fruitName.includes(textEntered) || fruitDescription.includes(textEntered)) {
-      fruitItem.style.display = 'flex'; // Show the fruit item if it matches the filter text
-    } else {
-      fruitItem.style.display = 'none'; // Hide the fruit item if it doesn't match the filter text
-    }
-  });
-});
+module.exports=handleFormSubmit; 
