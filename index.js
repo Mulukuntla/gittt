@@ -1,60 +1,69 @@
-function handleFormSubmit(event){
-  event.preventDefault();
-  console.log('Hi');
-  
+function task1() {
+  return new Promise(function (resolve, reject) {
+      setTimeout(() => {
+          resolve("Task 1 completed")
+      
+  }, 2000);
+      
+  })
  
-  let namee=event.target.username.value;
-  let emaill=event.target.email.value;
-  let phonee=event.target.phone.value;
-  localStorage.setItem('Username',namee)
-  localStorage.setItem('Email',emaill)
-  localStorage.setItem('Phone',phonee)
-  
-  
-  let obj= {
-    'username':namee,
-    'email':emaill,
-    'phone':phonee,
-  }
-  
-  console.log(namee);
-  console.log(emaill);
-  console.log(phonee);
-  console.log(obj);
-  localStorage.setItem(obj.email,JSON.stringify(obj));
-  
-  const parent=document.getElementById('listOfItems');
-  const child=document.createElement('li');
-  child.textContent=`${obj.username} - ${obj.email} - ${obj.phone}`
-  const deleteButton=document.createElement('button');
-  const deleteText=document.createTextNode('delete');
-  deleteButton.appendChild(deleteText)
-  deleteButton.type='button'
-  deleteButton.value='Delete'
-  child.appendChild(deleteButton)
-  parent.appendChild(child)
-  deleteButton.onclick=()=>{
-    localStorage.removeItem(obj.email);
-    parent.removeChild(child)  
-  }
-  const editButton=document.createElement('button');
-  const editText=document.createTextNode('edit');
-  editButton.appendChild(editText)
-  editButton.type='button'
-  editButton.value='edit'
-  child.appendChild(editButton)
-  editButton.onclick=()=>{
-    localStorage.removeItem(obj.email);
-    parent.removeChild(child)  
-    document.getElementById('username').value=obj.username
-    document.getElementById('email').value=obj.email
-    document.getElementById('phone').value=obj.phone
-  }
-  
-  
-  
-  
+}
+
+function task2() {
+  return new Promise(function (resolve, reject) {
+      setTimeout(() => {
+          resolve("Task 2 completed")
+      
+  }, 1000);
+      
+  })
   
 }
 
-module.exports=handleFormSubmit; 
+function allTasksCompleted() {
+  console.log('All tasks completed');
+}
+
+task1().then(function (result) {
+  console.log(result)
+  task2().then(function (result) {
+      console.log(result)
+      allTasksCompleted()
+  })
+})
+
+
+
+
+// change task1 and task2 function and return promise from them
+
+function task1(callback) {
+  setTimeout(() => {
+      console.log('Task 1 completed');
+      callback();
+  }, 2000);
+}
+
+function task2(callback) {
+  setTimeout(() => {
+      console.log('Task 2 completed');
+      callback();
+  }, 1000);
+}
+
+function allTasksCompleted() {
+  console.log('All tasks completed');
+}
+
+
+
+
+task1(() => {
+  task2(() => { 
+          allTasksCompleted();
+  });
+});
+
+
+
+// resolve the above callback hell issue with promises
